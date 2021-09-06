@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="fb449280-5291-4ada-ad2f-b4610476d2a6" >
+		<http:listener-connection host="localhost" port="8080" />
+	</http:listener-config>
+	<flow name="scatterFlow" doc:id="1a277443-27c9-4c66-b0bd-58e405c1009e" >
+		<http:listener doc:name="Listener" doc:id="01d5a0bc-4ce2-4004-bf64-35661f0ccddd" config-ref="HTTP_Listener_config" path="scatter"/>
+		<scatter-gather doc:name="Scatter-Gather" doc:id="81f9f19d-5db9-4eeb-b498-a037cc45fb2e" >
+			<route >
+				<logger level="INFO" doc:name="Logger" doc:id="68ce3e01-0df9-46a7-91e7-4b0134f0a618" message="1"/>
+			</route>
+			<route >
+				<logger level="INFO" doc:name="Logger" doc:id="fb90e1e6-b948-4f29-b346-38fc1f09ee9c" message="2"/>
+			</route>
+			<route >
+				<logger level="INFO" doc:name="Logger" doc:id="bc197e0b-626e-4041-a20c-992139f746d3" message="3"/>
+			</route>
+			<route >
+				<logger level="INFO" doc:name="Logger" doc:id="a8d67db9-5faf-48dd-a699-4e9148acc843" message="4"/>
+			</route>
+			<route >
+				<logger level="INFO" doc:name="Logger" doc:id="15380905-81d6-4ff3-bd33-c88cfc4b9ef7" />
+			</route>
+		</scatter-gather>
+		<logger level="INFO" doc:name="Logger" doc:id="192b41fa-c89a-44d2-ae01-e41fb98e6755" message="#[payload]"/>
+		<ee:transform doc:name="Transform Message" doc:id="0198b864-2755-4ba1-b2d9-a75279dfee19" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
